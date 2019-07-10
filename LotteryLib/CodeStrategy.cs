@@ -13,7 +13,7 @@ namespace LotteryLib {
         private Random random = new Random(new Guid().GetHashCode());
 
         /// <summary>
-        /// 冷热温各随机一半
+        /// 冷热温各随机取一半
         /// </summary>
         /// <param name="list">历史记录</param>
         /// <param name="pos">位置</param>
@@ -83,24 +83,26 @@ namespace LotteryLib {
 
             var leftNum = (int) Math.Ceiling(leftCode.Count / 2.0f);
             var rightNum = (int) Math.Ceiling(rightCode.Count / 2.0f);
-
+            int leftGetNum = 0;
+            int rightGetNum = 0;
             int index = 0;
-            for (var i = 0; i < leftNum; i++)
+            while (retCode.Count < 5)
             {
-                index = random.Next(leftCode.Count);
-                retCode.Add(leftCode[index].ToString());
-                leftCode.RemoveAt(index);
-            }
+                if (leftGetNum < leftNum)
+                {
+                    index = random.Next(leftCode.Count);
+                    retCode.Add(leftCode[index]);
+                    leftCode.RemoveAt(index);
+                    leftGetNum++;
+                }
 
-            for (var i = 0; i < rightNum; i++)
-            {
-                index = random.Next(rightCode.Count);
-                retCode.Add(rightCode[index].ToString());
-                rightCode.RemoveAt(index);
-            }
-
-            while (retCode.Count > 5) {
-                retCode.RemoveAt(retCode.Count - 1);
+                if (rightGetNum < rightNum && retCode.Count < 5)
+                {
+                    index = random.Next(rightCode.Count);
+                    retCode.Add(rightCode[index]);
+                    rightCode.RemoveAt(index);
+                    rightGetNum++;
+                }
             }
 
             return retCode;
