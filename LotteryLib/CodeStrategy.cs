@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LotteryLib {
     /// <summary>
     /// 出号策略
     /// </summary>
     public class CodeStrategy {
-        private Random random = new Random(new Guid().GetHashCode());
+        private readonly Random _random = new Random(Guid.NewGuid().GetHashCode());
 
         /// <summary>
         /// 冷热温各随机取一半
@@ -32,21 +33,21 @@ namespace LotteryLib {
             while (retCode.Count < 5) {
                 var index = 0;
                 if (hotGetNum < hotNum) {
-                    index = random.Next(hotCode.Count);
+                    index = _random.Next(hotCode.Count);
                     retCode.Add(hotCode[index]);
                     hotCode.RemoveAt(index);
                     hotGetNum++;
                 }
 
                 if (wenGetNum < wenNum && retCode.Count < 5) {
-                    index = random.Next(wenCode.Count);
+                    index = _random.Next(wenCode.Count);
                     retCode.Add(wenCode[index]);
                     wenCode.RemoveAt(index);
                     wenGetNum++;
                 }
 
                 if (lenGetNum < lenNum && retCode.Count < 5) {
-                    index = random.Next(lenCode.Count);
+                    index = _random.Next(lenCode.Count);
                     retCode.Add(lenCode[index]);
                     lenCode.RemoveAt(index);
                     lenGetNum++;
@@ -86,19 +87,55 @@ namespace LotteryLib {
             int index = 0;
             while (retCode.Count < 5) {
                 if (leftGetNum < leftNum) {
-                    index = random.Next(leftCode.Count);
+                    index = _random.Next(leftCode.Count);
                     retCode.Add(leftCode[index]);
                     leftCode.RemoveAt(index);
                     leftGetNum++;
                 }
 
                 if (rightGetNum < rightNum && retCode.Count < 5) {
-                    index = random.Next(rightCode.Count);
+                    index = _random.Next(rightCode.Count);
                     retCode.Add(rightCode[index]);
                     rightCode.RemoveAt(index);
                     rightGetNum++;
                 }
             }
+
+            return retCode;
+        }
+
+        /// <summary>
+        /// 上期号码+均匀随机选取
+        /// </summary>
+        /// <param name="list">历史记录</param>
+        /// <param name="pos">位置</param>
+        /// <returns></returns>
+        public List<string> UniformRandom(IList<CodeData> list, int pos) {
+            var smallOddCode  = new List<string>(new string[]{"1", "3"});
+            var smallEvenCode = new List<string>(new string[]{"0", "2", "4"});
+            var bigOddCode    = new List<string>(new string[]{"5", "7", "9"});
+            var bigEvenCode   = new List<string>(new string[]{"6", "8"});
+
+            var retCode = new List<string>();
+            var lastCode = list[0].codes[pos].ToString();
+
+            smallOddCode.Remove(lastCode);
+            smallEvenCode.Remove(lastCode);
+            bigOddCode.Remove(lastCode);
+            bigEvenCode.Remove(lastCode);
+
+            retCode.Add(lastCode);
+            var index = _random.Next(smallOddCode.Count);
+            retCode.Add(smallOddCode[index]);
+
+            index = _random.Next(smallEvenCode.Count);
+            retCode.Add(smallEvenCode[index]);
+
+            index = _random.Next(bigOddCode.Count);
+            retCode.Add(bigOddCode[index]);
+
+            index = _random.Next(bigEvenCode.Count);
+            retCode.Add(bigEvenCode[index]);
 
             return retCode;
         }
