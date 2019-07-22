@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LotteryLib {
     /// <summary>
@@ -18,11 +15,7 @@ namespace LotteryLib {
         /// <returns></returns>
         public static List<string> GetHotCode(IList<CodeData> list, int pos, int count) {
             var hotCode = new List<string>();
-            var nums = new int[10];
-            for (int i = 0; i < count; i++) {
-                int c = int.Parse(list[i].codes[pos].ToString());
-                nums[c]++;
-            }
+            var nums = GetAppearCount(list, pos, count);
             float times = count / 10.0f * 1.5f;
             for (int i = 0; i < nums.Length; i++) {
                 if (nums[i] >= times) {
@@ -41,11 +34,7 @@ namespace LotteryLib {
         /// <returns></returns>
         public static List<string> GetWenCode(IList<CodeData> list, int pos, int count) {
             var wenCode = new List<string>();
-            var nums = new int[10];
-            for (int i = 0; i < count; i++) {
-                int c = int.Parse(list[i].codes[pos].ToString());
-                nums[c]++;
-            }
+            var nums = GetAppearCount(list, pos, count);
             float minTimes = count / 10.0f * 0.5f;
             float maxTimes = count / 10.0f * 1.5f;
             for (int i = 0; i < nums.Length; i++) {
@@ -65,11 +54,7 @@ namespace LotteryLib {
         /// <returns></returns>
         public static List<string> GetLenCode(IList<CodeData> list, int pos, int count) {
             var lenCode = new List<string>();
-            var nums = new int[10];
-            for (int i = 0; i < count; i++) {
-                int c = int.Parse(list[i].codes[pos].ToString());
-                nums[c]++;
-            }
+            var nums = GetAppearCount(list, pos, count);
             float times = count / 10.0f * 0.5f;
             for (int i = 0; i < nums.Length; i++) {
                 if (nums[i] <= times) {
@@ -79,6 +64,36 @@ namespace LotteryLib {
 
             return lenCode;
 
+        }
+
+        /// <summary>
+        /// 统计出现次数
+        /// </summary>
+        /// <param name="list">历史记录</param>
+        /// <param name="pos">位置</param>
+        /// <param name="count">统计期数</param>
+        /// <returns></returns>
+        public static int[] GetAppearCount(IList<CodeData> list, int pos, int count) {
+            var appearCounts = new int[10];
+            for (int i = 0; i < count && i < list.Count; i++) {
+                var num = Convert.ToInt32(list[i].codes[pos].ToString());
+                appearCounts[num]++;
+            }
+            return appearCounts;
+        }
+
+        /// <summary>
+        /// 出现概率
+        /// </summary>
+        /// <returns></returns>
+        public static float[] GetAppearRate(IList<CodeData> list, int pos, int count) {
+            var counts = GetAppearCount(list, pos, count);
+            var rates = new float[10];
+            for (int i = 0; i < rates.Length; i++) {
+                rates[i] = counts[i] * 1.0f / count;
+            }
+
+            return rates;
         }
 
     }
