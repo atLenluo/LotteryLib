@@ -58,11 +58,31 @@ namespace LotteryLib {
         }
 
         /// <summary>
+        /// 冷热温随机3码
+        /// </summary>
+        public List<string> LenHotWen3Code(IList<CodeData> list, int pos, int count) {
+            var hotCode = CodeUtil.GetHotCode(list, pos, count);
+            var wenCode = CodeUtil.GetWenCode(list, pos, count);
+            var lenCode = CodeUtil.GetLenCode(list, pos, count);
+
+            var retCode = new List<string>();
+            var index = _random.Next(hotCode.Count);
+            retCode.Add(hotCode[index]);
+
+            index = _random.Next(wenCode.Count);
+            retCode.Add(wenCode[index]);
+
+            index = _random.Next(lenCode.Count);
+            retCode.Add(lenCode[index]);
+
+            return retCode;
+        }
+
+        /// <summary>
         /// 上期号码为分割线，左边随机一半+上期号码+右边随机一半
         /// </summary>
         /// <param name="list">历史记录</param>
         /// <param name="pos">位置</param>
-        /// <returns></returns>
         public List<string> LeftMidRightRandomHalf(IList<CodeData> list, int pos) {
             var retCode = new List<string>();
             var midCode = list[0].codes[pos].ToString();
@@ -105,7 +125,7 @@ namespace LotteryLib {
         }
 
         /// <summary>
-        /// 上期号码+均匀随机选取
+        /// 均匀随机选取
         /// </summary>
         /// <param name="list">历史记录</param>
         /// <param name="pos">位置</param>
@@ -117,14 +137,6 @@ namespace LotteryLib {
             var bigEvenCode   = new List<string>(new string[]{"6", "8"});
 
             var retCode = new List<string>();
-            var lastCode = list[0].codes[pos].ToString();
-
-            smallOddCode.Remove(lastCode);
-            smallEvenCode.Remove(lastCode);
-            bigOddCode.Remove(lastCode);
-            bigEvenCode.Remove(lastCode);
-
-            retCode.Add(lastCode);
             var index = _random.Next(smallOddCode.Count);
             retCode.Add(smallOddCode[index]);
 
