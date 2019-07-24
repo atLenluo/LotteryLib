@@ -13,16 +13,20 @@ namespace LibTest {
             var parser = new CodeParser();
             var list = parser.Parse("D:\\360极速浏览器下载\\摩登挂机软件\\OpenCode\\YZ30SC.txt");
 
-            var counts = new int[] { 30, 60, 90, 120, 150, 180, 210, 240, 270, 300};
-            for (int i = 0; i < counts.Length; i++) {
-                var appears = CodeUtil.GetAppearRate(list, 0, counts[i]);
-                Console.Write(counts[i] + "：  ");
-                for (int j = 0; j < appears.Length; j++) {
-                    Console.Write(j + "：" + appears[j].ToString("F2") + ", ");
-                }
-                Console.WriteLine();
+            var hotCode = CodeUtil.GetHotCode(list, 0, 30);
+            var wenCode = CodeUtil.GetWenCode(list, 0, 30);
+            var lenCode = CodeUtil.GetLenCode(list, 0, 30);
+
+            PrintCodeList(hotCode);
+            PrintCodeList(wenCode);
+            PrintCodeList(lenCode);
+        }
+
+        private static void PrintCodeList(List<string> codeList) {
+            foreach (var c in codeList) {
+                Console.Write(c + " ");
             }
-            
+            Console.WriteLine();
         }
     }
 }

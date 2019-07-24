@@ -10,27 +10,28 @@ namespace LotteryLib {
         private readonly Random _random = new Random(Guid.NewGuid().GetHashCode());
 
         /// <summary>
-        /// 冷热温各随机取一半
+        /// 冷热温各随机自定义胆码
         /// </summary>
         /// <param name="list">历史记录</param>
         /// <param name="pos">位置</param>
         /// <param name="count">统计期数</param>
+        /// <param name="num">胆码数量</param>
         /// <returns></returns>
-        public List<string> LenHotWenRandomHalf(IList<CodeData> list, int pos, int count) {
+        public List<string> LenHotWenRandomCustom(IList<CodeData> list, int pos, int count, int num) {
             var hotCode = CodeUtil.GetHotCode(list, pos, count);
             var wenCode = CodeUtil.GetWenCode(list, pos, count);
             var lenCode = CodeUtil.GetLenCode(list, pos, count);
 
-            var hotNum = (int) Math.Ceiling(hotCode.Count / 2.0f);
-            var wenNum = (int) Math.Ceiling(wenCode.Count / 2.0f);
-            var lenNum = (int) Math.Ceiling(lenCode.Count / 2.0f);
+            var hotNum = (int) Math.Ceiling(hotCode.Count / 10.0f * num);
+            var wenNum = (int) Math.Ceiling(wenCode.Count / 10.0f * num);
+            var lenNum = (int) Math.Ceiling(lenCode.Count / 10.0f * num);
 
             var hotGetNum = 0;
             var wenGetNum = 0;
             var lenGetNum = 0;
 
             var retCode = new List<string>();
-            while (retCode.Count < 5) {
+            while (retCode.Count < num) {
                 var index = 0;
                 if (hotGetNum < hotNum) {
                     index = _random.Next(hotCode.Count);
@@ -39,41 +40,20 @@ namespace LotteryLib {
                     hotGetNum++;
                 }
 
-                if (wenGetNum < wenNum && retCode.Count < 5) {
+                if (wenGetNum < wenNum && retCode.Count < num) {
                     index = _random.Next(wenCode.Count);
                     retCode.Add(wenCode[index]);
                     wenCode.RemoveAt(index);
                     wenGetNum++;
                 }
 
-                if (lenGetNum < lenNum && retCode.Count < 5) {
+                if (lenGetNum < lenNum && retCode.Count < num) {
                     index = _random.Next(lenCode.Count);
                     retCode.Add(lenCode[index]);
                     lenCode.RemoveAt(index);
                     lenGetNum++;
                 }
             }
-
-            return retCode;
-        }
-
-        /// <summary>
-        /// 冷热温随机3码
-        /// </summary>
-        public List<string> LenHotWen3Code(IList<CodeData> list, int pos, int count) {
-            var hotCode = CodeUtil.GetHotCode(list, pos, count);
-            var wenCode = CodeUtil.GetWenCode(list, pos, count);
-            var lenCode = CodeUtil.GetLenCode(list, pos, count);
-
-            var retCode = new List<string>();
-            var index = _random.Next(hotCode.Count);
-            retCode.Add(hotCode[index]);
-
-            index = _random.Next(wenCode.Count);
-            retCode.Add(wenCode[index]);
-
-            index = _random.Next(lenCode.Count);
-            retCode.Add(lenCode[index]);
 
             return retCode;
         }

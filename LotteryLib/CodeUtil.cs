@@ -15,10 +15,9 @@ namespace LotteryLib {
         /// <returns></returns>
         public static List<string> GetHotCode(IList<CodeData> list, int pos, int count) {
             var hotCode = new List<string>();
-            var nums = GetAppearCount(list, pos, count);
-            float times = count / 10.0f * 1.5f;
-            for (int i = 0; i < nums.Length; i++) {
-                if (nums[i] >= times) {
+            var rates = GetAppearRate(list, pos, count);
+            for (int i = 0; i < rates.Length; i++) {
+                if (rates[i] >= 0.15f) {
                     hotCode.Add(i.ToString());
                 }
             }
@@ -34,11 +33,9 @@ namespace LotteryLib {
         /// <returns></returns>
         public static List<string> GetWenCode(IList<CodeData> list, int pos, int count) {
             var wenCode = new List<string>();
-            var nums = GetAppearCount(list, pos, count);
-            float minTimes = count / 10.0f * 0.5f;
-            float maxTimes = count / 10.0f * 1.5f;
-            for (int i = 0; i < nums.Length; i++) {
-                if (nums[i] < maxTimes && nums[i] > minTimes) {
+            var rates = GetAppearRate(list, pos, count);
+            for (int i = 0; i < rates.Length; i++) {
+                if (rates[i] < 0.15f && rates[i] > 0.05f) {
                     wenCode.Add(i.ToString());
                 }
             }
@@ -54,10 +51,9 @@ namespace LotteryLib {
         /// <returns></returns>
         public static List<string> GetLenCode(IList<CodeData> list, int pos, int count) {
             var lenCode = new List<string>();
-            var nums = GetAppearCount(list, pos, count);
-            float times = count / 10.0f * 0.5f;
-            for (int i = 0; i < nums.Length; i++) {
-                if (nums[i] <= times) {
+            var rates = GetAppearRate(list, pos, count);
+            for (int i = 0; i < rates.Length; i++) {
+                if (rates[i] <= 0.05f) {
                     lenCode.Add(i.ToString());
                 }
             }
