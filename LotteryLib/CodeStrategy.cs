@@ -22,9 +22,9 @@ namespace LotteryLib {
             var wenCode = CodeUtil.GetWenCode(list, pos, count);
             var lenCode = CodeUtil.GetLenCode(list, pos, count);
 
-            var hotNum = (int) Math.Ceiling(hotCode.Count / 10.0f * num);
-            var wenNum = (int) Math.Ceiling(wenCode.Count / 10.0f * num);
-            var lenNum = (int) Math.Ceiling(lenCode.Count / 10.0f * num);
+            var hotNum = (int) Math.Round(hotCode.Count / 10.0f * num);
+            var wenNum = (int) Math.Round(wenCode.Count / 10.0f * num);
+            var lenNum = (int) Math.Round(lenCode.Count / 10.0f * num);
 
             var hotGetNum = 0;
             var wenGetNum = 0;
@@ -105,29 +105,25 @@ namespace LotteryLib {
         }
 
         /// <summary>
-        /// 均匀随机选取
+        /// 均匀随机胆码
         /// </summary>
-        /// <param name="list">历史记录</param>
-        /// <param name="pos">位置</param>
-        /// <returns></returns>
         public List<string> UniformRandom(IList<CodeData> list, int pos) {
-            var smallOddCode  = new List<string>(new string[]{"1", "3"});
-            var smallEvenCode = new List<string>(new string[]{"0", "2", "4"});
-            var bigOddCode    = new List<string>(new string[]{"5", "7", "9"});
-            var bigEvenCode   = new List<string>(new string[]{"6", "8"});
+            var smallOddCode  = new List<string>(new []{"1", "3"});
+            var smallEvenCode = new List<string>(new []{"0", "2", "4"});
+            var bigOddCode    = new List<string>(new []{"5", "7", "9"});
+            var bigEvenCode   = new List<string>(new []{"6", "8"});
 
             var retCode = new List<string>();
-            var index = _random.Next(smallOddCode.Count);
-            retCode.Add(smallOddCode[index]);
 
-            index = _random.Next(smallEvenCode.Count);
-            retCode.Add(smallEvenCode[index]);
-
-            index = _random.Next(bigOddCode.Count);
-            retCode.Add(bigOddCode[index]);
-
-            index = _random.Next(bigEvenCode.Count);
-            retCode.Add(bigEvenCode[index]);
+            smallOddCode.RemoveAt(_random.Next(smallOddCode.Count));
+            smallEvenCode.RemoveAt(_random.Next(smallEvenCode.Count));
+            bigOddCode.RemoveAt(_random.Next(bigOddCode.Count));
+            bigEvenCode.RemoveAt(_random.Next(bigEvenCode.Count));
+            
+            retCode.AddRange(smallOddCode);
+            retCode.AddRange(smallEvenCode);
+            retCode.AddRange(bigOddCode);
+            retCode.AddRange(bigEvenCode);
 
             return retCode;
         }

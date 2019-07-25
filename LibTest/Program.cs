@@ -1,6 +1,7 @@
 ﻿using LotteryLib;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,13 +14,11 @@ namespace LibTest {
             var parser = new CodeParser();
             var list = parser.Parse("D:\\360极速浏览器下载\\摩登挂机软件\\OpenCode\\YZ30SC.txt");
 
-            var hotCode = CodeUtil.GetHotCode(list, 0, 30);
-            var wenCode = CodeUtil.GetWenCode(list, 0, 30);
-            var lenCode = CodeUtil.GetLenCode(list, 0, 30);
-
-            PrintCodeList(hotCode);
-            PrintCodeList(wenCode);
-            PrintCodeList(lenCode);
+            var strategy = new CodeStrategy();
+            for (int i = 0; i < 5; i++) {
+                PrintCodeList(strategy.UniformRandom(list, i));
+            }
+            
         }
 
         private static void PrintCodeList(List<string> codeList) {
