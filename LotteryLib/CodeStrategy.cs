@@ -22,9 +22,9 @@ namespace LotteryLib {
             var wenCode = CodeUtil.GetWenCode(list, pos, count);
             var lenCode = CodeUtil.GetLenCode(list, pos, count);
 
-            var hotNum = (int) Math.Round(hotCode.Count / 10.0f * num);
-            var wenNum = (int) Math.Round(wenCode.Count / 10.0f * num);
-            var lenNum = (int) Math.Round(lenCode.Count / 10.0f * num);
+            var hotNum = (int) Math.Ceiling(hotCode.Count / 10.0f * num);
+            var wenNum = (int) Math.Ceiling(wenCode.Count / 10.0f * num);
+            var lenNum = (int) Math.Ceiling(lenCode.Count / 10.0f * num);
 
             var hotGetNum = 0;
             var wenGetNum = 0;
